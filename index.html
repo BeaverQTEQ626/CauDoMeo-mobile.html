@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Câu Đố</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #222;
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  background: #333;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+}
+
+.correct { background: #2ecc71; }
+.wrong { background: #e74c3c; }
+.answer { background: #555; color: white; }
+
+#score {
+  font-size: 20px;
+  margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2 id="question">Câu hỏi</h2>
+  <div id="answers"></div>
+  <div id="score"></div>
+</div>
+
+<script>
+const quiz = [
+  {
+    question: "HTML là viết tắt của gì?",
+    answers: ["Hyper Text Markup Language", "High Text Machine Language", "Home Tool Markup Language"],
+    correct: 0
+  },
+  {
+    question: "CSS dùng để làm gì?",
+    answers: ["Tạo cấu trúc web", "Trang trí giao diện", "Lập trình backend"],
+    correct: 1
+  },
+  {
+    question: "JavaScript chạy ở đâu?",
+    answers: ["Trình duyệt", "Máy giặt", "Word"],
+    correct: 0
+  }
+];
+
+let current = 0;
+let score = 0;
+
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const scoreEl = document.getElementById("score");
+
+function loadQuestion() {
+  answersEl.innerHTML = "";
+  questionEl.innerText = quiz[current].question;
+
+  quiz[current].answers.forEach((ans, index) => {
+    const btn = document.createElement("button");
+    btn.innerText = ans;
+    btn.className = "answer";
+    btn.onclick = () => checkAnswer(index, btn);
+    answersEl.appendChild(btn);
+  });
+}
+
+function checkAnswer(index, btn) {
+  const correct = quiz[current].correct;
+
+  if (index === correct) {
+    btn.classList.add("correct");
+    score++;
+  } else {
+    btn.classList.add("wrong");
+  }
+
+  setTimeout(() => {
+    current++;
+    if (current < quiz.length) {
+      loadQuestion();
+    } else {
+      showResult();
+    }
+  }, 800);
+}
+
+function showResult() {
+  questionEl.innerText = "🎉 Hoàn thành!";
+  answersEl.innerHTML = "";
+  scoreEl.innerText = `Điểm của bạn: ${score} / ${quiz.length}`;
+}
+
+loadQuestion();
+</script>
+
+</body>
+  </html>
